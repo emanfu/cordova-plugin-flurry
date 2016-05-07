@@ -23,6 +23,7 @@
 
 @property (assign) FlurryAdSize adSize;
 @property (nonatomic, retain) NSString* adSpace;
+@property (nonatomic, retain) NSString* adSpaceInterstitial;
 @property (assign) BOOL inited;
 
 - (void) validateSession:(NSString*)adId;
@@ -39,6 +40,7 @@
     self.inited = NO;
     self.adSize = BANNER_BOTTOM;
     self.adSpace = AD_BANNER_BOTTOM;
+    self.adSpaceInterstitial = AD_INTERSTITIAL;
 }
 
 - (void) validateSession:(NSString *)adId
@@ -71,14 +73,29 @@
             [Flurry setEventLoggingEnabled:YES];
             [Flurry setBackgroundSessionEnabled:YES];
         }
+        self.adSpaceInterstitial = AD_INTERSTITIAL;
     }
     
     if(self.adPosition <= POS_TOP_RIGHT) {
         self.adSize = BANNER_TOP;
-        self.adSpace = AD_BANNER_TOP;
+        if(self.isTesting) {
+            self.adSpace = AD_BANNER_TOP;
+        }
     } else {
         self.adSize = BANNER_BOTTOM;
-        self.adSpace = AD_BANNER_BOTTOM;
+        if(self.isTesting) {
+            self.adSpace = AD_BANNER_BOTTOM;
+        }
+    }
+    
+    // get ad space for banner
+    if (!self.isTesting) {
+        if (options[@"bannerName"]) {
+            self.adSpace = options[@"bannerName"];
+        }
+        if (options[@"interstitialName"]) {
+            self.adSpaceInterstitial = options[@"interstitialName"];
+        }
     }
 }
 
@@ -127,22 +144,22 @@
 
 - (void) __loadInterstitial:(NSObject*)interstitial {
     UIView* view = (UIView*) interstitial;
-    [FlurryAds fetchAdForSpace:AD_INTERSTITIAL frame:view.bounds size:FULLSCREEN];
+    [FlurryAds fetchAdForSpace:self.adSpaceInterstitial frame:view.bounds size:FULLSCREEN];
 }
 
 - (void) __showInterstitial:(NSObject*)interstitial {
     UIView* view = (UIView*) interstitial;
-    [FlurryAds displayAdForSpace:AD_INTERSTITIAL onView:view viewControllerForPresentation:[self getViewController]];
+    [FlurryAds displayAdForSpace:self.adSpaceInterstitial onView:view viewControllerForPresentation:[self getViewController]];
 }
 
 - (void) __destroyInterstitial:(NSObject*)interstitial {
-    [FlurryAds removeAdFromSpace:AD_INTERSTITIAL];
+    [FlurryAds removeAdFromSpace:self.adSpaceInterstitial];
 }
 
 #pragma mark FlurryAdDelegate implementation
 
 - (void) spaceDidReceiveAd:(NSString*)adSpace {
-    BOOL isInterstitial = [adSpace isEqualToString:AD_INTERSTITIAL];
+    BOOL isInterstitial = [adSpace isEqualToString:self.adSpaceInterstitial];
     NSString* adType = isInterstitial ? ADTYPE_INTERSTITIAL : ADTYPE_BANNER;
     [self fireAdEvent:EVENT_AD_LOADED withType:adType];
     
@@ -162,17 +179,17 @@
 }
 
 - (void) spaceDidFailToReceiveAd:(NSString*) adSpace error:(NSError *)error {
-    NSString* adType = [adSpace isEqualToString:AD_INTERSTITIAL] ? ADTYPE_INTERSTITIAL : ADTYPE_BANNER;
+    NSString* adType = [adSpace isEqualToString:self.adSpaceInterstitial] ? ADTYPE_INTERSTITIAL : ADTYPE_BANNER;
     [self fireAdErrorEvent:EVENT_AD_FAILLOAD withCode:(int)error.code withMsg:[error localizedDescription] withType:adType];
 }
 
 - (void) spaceDidFailToRender:(NSString *)adSpace error:(NSError *)error {
-    NSString* adType = [adSpace isEqualToString:AD_INTERSTITIAL] ? ADTYPE_INTERSTITIAL : ADTYPE_BANNER;
+    NSString* adType = [adSpace isEqualToString:self.adSpaceInterstitial] ? ADTYPE_INTERSTITIAL : ADTYPE_BANNER;
     [self fireAdErrorEvent:EVENT_AD_FAILLOAD withCode:(int)error.code withMsg:[error localizedDescription] withType:adType];
 }
 
 - (void) spaceWillLeaveApplication:(NSString *)adSpace {
-    NSString* adType = [adSpace isEqualToString:AD_INTERSTITIAL] ? ADTYPE_INTERSTITIAL : ADTYPE_BANNER;
+    NSString* adType = [adSpace isEqualToString:self.adSpaceInterstitial] ? ADTYPE_INTERSTITIAL : ADTYPE_BANNER;
     [self fireAdEvent:EVENT_AD_LEAVEAPP withType:adType];
 }
 
@@ -186,7 +203,7 @@
 }
 
 - (void) spaceWillDismiss:(NSString *)adSpace {
-    NSString* adType = [adSpace isEqualToString:AD_INTERSTITIAL] ? ADTYPE_INTERSTITIAL : ADTYPE_BANNER;
+    NSString* adType = [adSpace isEqualToString:self.adSpaceInterstitial] ? ADTYPE_INTERSTITIAL : ADTYPE_BANNER;
     [self fireAdEvent:EVENT_AD_WILLDISMISS withType:adType];
 }
 
