@@ -16,6 +16,7 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -43,11 +44,15 @@ public class FlurryAdPlugin extends GenericAdPlugin {
     private static final String AD_BOTTOM_BANNER = "BOTTOM_BANNER";
     private static final String AD_INTERSTITIAL = "INTERSTITIAL_MAIN_VIEW";
     private static final String AD_NATIVE = "NATIVE_AD";
+
+	private static final String OPT_BANNER_NAME = "bannerName";
+	private static final String OPT_INTERSTITIAL_NAME = "interstitialName";
     
     private static final String TEST_APIKEY = "G56KN4J49YT66CFRD5K6";
 
     private boolean inited = false;
     private String adSpace = AD_BOTTOM_BANNER;
+	private String adSpaceInterstitial = AD_INTERSTITIAL;
     
 	public static final String ACTION_CREATE_NATIVEAD = "createNativeAd";
 	public static final String ACTION_REMOVE_NATIVEAD = "removeNativeAd";
@@ -100,11 +105,12 @@ public class FlurryAdPlugin extends GenericAdPlugin {
 			    FlurryAgent.setLogLevel(Log.VERBOSE);
 			}
 		}
-		
-		if(adPosition <= TOP_RIGHT) {
-			adSpace = AD_TOP_BANNER;
-		} else {
-			adSpace = AD_BOTTOM_BANNER;
+
+		if (options.has(OPT_BANNER_NAME)) {
+			adSpace = options.optString(OPT_BANNER_NAME);
+		}
+		if (options.has(OPT_INTERSTITIAL_NAME)) {
+			adSpaceInterstitial = options.optString(OPT_INTERSTITIAL_NAME);
 		}
 	}
 
@@ -234,9 +240,12 @@ public class FlurryAdPlugin extends GenericAdPlugin {
 		validateSession(adId);
 		
 		FrameLayout ad = new FrameLayout(getActivity());
-    	FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    	FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT,
+				Gravity.CENTER);
     	ad.setLayoutParams(params);
-    	
+
     	mFlurryAdBanner = new FlurryAdBanner(getActivity(), ad, adSpace);
     	mFlurryAdBanner.setListener(bannerAdListener);
     	
@@ -326,7 +335,7 @@ public class FlurryAdPlugin extends GenericAdPlugin {
 		
 		validateSession(adId);
 		
-		mFlurryAdInterstitial = new FlurryAdInterstitial(getActivity(), AD_INTERSTITIAL);
+		mFlurryAdInterstitial = new FlurryAdInterstitial(getActivity(), adSpaceInterstitial);
 		mFlurryAdInterstitial.setListener( interstitialAdListener );
 
 		return mFlurryAdInterstitial;
