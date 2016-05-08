@@ -32,7 +32,7 @@
         </config-file>
         <source-file src="src/android/FlurryAdPlugin.java" target-dir="src/com/rjfun/cordova/flurry" />
         
-        <dependency id="com.google.playservices" url="https://github.com/floatinghotpot/google-play-services" commit="r19" />
+        <!-- <dependency id="com.google.playservices" url="https://github.com/floatinghotpot/google-play-services" commit="r19" />-->
 	    <!-- dependency id="android.support.v4"/ -->
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
