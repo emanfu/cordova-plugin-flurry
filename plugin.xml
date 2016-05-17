@@ -62,19 +62,33 @@
          <header-file src="src/ios/FlurryAdPlugin.h"/>
          <source-file src="src/ios/FlurryAdPlugin.m"/>
          
-         <header-file src="src/ios/Flurry.h" />
-         <header-file src="src/ios/FlurryAds.h" />
-         <header-file src="src/ios/FlurryAdDelegate.h" />
-         <source-file src="src/ios/libFlurry_5.4.0.a" framework="true" />
-         <source-file src="src/ios/libFlurryAds_5.4.0.a" framework="true" />
-         
+         <header-file src="src/ios/Flurry/Flurry.h" />
+         <source-file src="src/ios/Flurry/FlurryEmpty.m" />
+         <source-file src="src/ios/Flurry/libFlurry_7.6.0.a" framework="true" />
+
+         <source-file src="src/ios/FlurryAds/FlurryAdsEmpty.m" />
+         <source-file src="src/ios/FlurryAds/libFlurryAds_7.6.0.a" framework="true" />
+         <header-file src="src/ios/FlurryAds/StaticAPI/FlurryAds.h" />
+         <header-file src="src/ios/FlurryAds/StaticAPI/FlurryAdDelegate.h" />
+         <header-file src="src/ios/FlurryAds/Shared/FlurryAdError.h" />
+         <header-file src="src/ios/FlurryAds/Shared/FlurryAdTargeting.h" />
+         <header-file src="src/ios/FlurryAds/FlurryAdBanner/FlurryAdBanner.h" />
+         <header-file src="src/ios/FlurryAds/FlurryAdBanner/FlurryAdBannerDelegate.h" />
+         <header-file src="src/ios/FlurryAds/FlurryAdInterstitial/FlurryAdInterstitial.h" />
+         <header-file src="src/ios/FlurryAds/FlurryAdInterstitial/FlurryAdInterstitialDelegate.h" />
+         <header-file src="src/ios/FlurryAds/FlurryAdNative/FlurryAdNative.h" />
+         <header-file src="src/ios/FlurryAds/FlurryAdNative/FlurryAdNativeAsset.h" />
+         <header-file src="src/ios/FlurryAds/FlurryAdNative/FlurryAdNativeDelegate.h" />
+         <header-file src="src/ios/FlurryAds/FlurryAdNative/FlurryAdNativeStyle.h" />
+
          <framework src="AdSupport.framework" />
+         <framework src="AVFoundation.framework" />
          <framework src="CoreGraphics.framework" />
+         <framework src="CoreMedia.framework" />
          <framework src="Foundation.framework" />
          <framework src="MediaPlayer.framework" />
          <framework src="Security.framework" />
          <framework src="StoreKit.framework" />
-         <framework src="MessageUI.framework" />
          <framework src="SystemConfiguration.framework" />
          <framework src="UIKit.framework" />
          <framework src="libz.dylib" />
