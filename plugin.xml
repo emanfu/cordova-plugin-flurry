@@ -48,8 +48,8 @@
     		<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
           </config-file>
           
-        <source-file src="src/android/FlurryAds-5.3.0.jar" target-dir="libs" />
-        <source-file src="src/android/FlurryAnalytics-5.3.0.jar" target-dir="libs" />
+        <source-file src="src/android/flurryAds_6.3.1.jar" target-dir="libs" />
+        <source-file src="src/android/flurryAnalytics_6.3.1.jar" target-dir="libs" />
      </platform>
      
      <!-- ios -->
