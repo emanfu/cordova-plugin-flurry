@@ -396,7 +396,12 @@ public class FlurryAdPlugin extends GenericAdPlugin {
 		public void onShowFullscreen(FlurryAdNative arg0) {
         	fireAdEvent(EVENT_AD_PRESENT, ADTYPE_NATIVE);
 		}
-		
+
+		@Override
+		public void onCollapsed(FlurryAdNative arg0) {}
+
+		@Override
+		public void onExpanded(FlurryAdNative arg0) {}
 	};
 
 	// nativeAdId = "apikey/index"
